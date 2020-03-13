@@ -1,0 +1,85 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>手机号码归属地查询</title>
+<script src="../resource/main.js"></script>
+<script language="javascript">equipment();</script>
+<!-- jquery 1.7 js-->
+<script type="text/javascript" src="//apps.bdimg.com/libs/jquery/1.7.0/jquery.min.js"></script>
+<!-- twitter-bootstrap js -->
+<script type="text/javascript" src="//cdn.bootcss.com/twitter-bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#btn").click(function(){
+            var action = $("#lg-form").attr('action');
+            var form_data = {
+                number: jQuery.trim($("#Search_box").val()),
+                is_ajax: 1
+            };
+            // 检测输入内容
+            if ( jQuery.trim($("#Search_box").val()) == "")
+            {
+                $("#message").html('<p>友情提示....</p><p class="error">搜索框不能为空，请输入完整！</p>');
+                $("#Search_box").focus(); 
+                return false;
+            }
+            // 传递参数
+            $.ajax({
+                type: "get",
+                url: action,
+                dataType: 'jsonp',//使用jsonp解决跨域访问问题
+                jsonp:"callback",
+                jsonpCallback:"success_json",
+                data: form_data,
+                success: function(json)
+                {
+                    if($.trim(json.code) == "0"){
+                        $("#message").html(
+                            '<p>查询结果....</p><p class="success">归属地为：' + json.data.province + json.data.city + json.data.isp + '</p>');
+                    }
+                    else if($.trim(json.code) == "1"){
+                        $("#message").html('<p>错误....</p><p class="error">'+json.msg+'</p>');
+                    }
+                    else if($.trim(json.code) == "2"){
+                        $("#message").html('<p>错误....</p><p class="error">'+json.msg+'</p>');
+                    }
+					else if($.trim(json.code) == "-1"){
+                        $("#message").html('<p>提示....</p><p class="error">'+json.msg+'</p>');
+                    }
+                    else{
+                        $("#message").html('<p class="error">错误: 数据提交过程中发生未知异常.</p>');
+                    }
+                }   
+            });
+            return false;
+        });
+    });
+    </script>
+<style type="text/css">
+body{background-image:url(data:image/jpg;base64,/9j/4QAYRXhpZgAASUkqAAgAAAAAAAAAAAAAAP/sABFEdWNreQABAAQAAAAeAAD/4QMZaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wLwA8P3hwYWNrZXQgYmVnaW49Iu+7vyIgaWQ9Ilc1TTBNcENlaGlIenJlU3pOVGN6a2M5ZCI/PiA8eDp4bXBtZXRhIHhtbG5zOng9ImFkb2JlOm5zOm1ldGEvIiB4OnhtcHRrPSJBZG9iZSBYTVAgQ29yZSA1LjMtYzAxMSA2Ni4xNDU2NjEsIDIwMTIvMDIvMDYtMTQ6NTY6MjcgICAgICAgICI+IDxyZGY6UkRGIHhtbG5zOnJkZj0iaHR0cDovL3d3dy53My5vcmcvMTk5OS8wMi8yMi1yZGYtc3ludGF4LW5zIyI+IDxyZGY6RGVzY3JpcHRpb24gcmRmOmFib3V0PSIiIHhtbG5zOnhtcE1NPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvbW0vIiB4bWxuczpzdFJlZj0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL3NUeXBlL1Jlc291cmNlUmVmIyIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bXBNTTpEb2N1bWVudElEPSJ4bXAuZGlkOjJCNEU2RjI4OTA4NTExRTY5NzY0ODM0ODQ0QzM4RTJFIiB4bXBNTTpJbnN0YW5jZUlEPSJ4bXAuaWlkOjJCNEU2RjI3OTA4NTExRTY5NzY0ODM0ODQ0QzM4RTJFIiB4bXA6Q3JlYXRvclRvb2w9IkFkb2JlIFBob3Rvc2hvcCBDUzYgV2luZG93cyI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSI1NDhBMzNDMzY4REUzMDM3RjM0OEY2MzQ4QTM3RjE0QyIgc3RSZWY6ZG9jdW1lbnRJRD0iNTQ4QTMzQzM2OERFMzAzN0YzNDhGNjM0OEEzN0YxNEMiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7/7gAOQWRvYmUAZMAAAAAB/9sAhAAQCwsLDAsQDAwQFw8NDxcbFBAQFBsfFxcXFxcfHhcaGhoaFx4eIyUnJSMeLy8zMy8vQEBAQEBAQEBAQEBAQEBAAREPDxETERUSEhUUERQRFBoUFhYUGiYaGhwaGiYwIx4eHh4jMCsuJycnLis1NTAwNTVAQD9AQEBAQEBAQEBAQED/wAARCAAcABwDASIAAhEBAxEB/8QAYgABAQEBAAAAAAAAAAAAAAAAAQIABgEBAQEBAAAAAAAAAAAAAAAAAQIAAxAAAgECBQUAAAAAAAAAAAAAAAFxEQIhMUGBwWEiMiNDEQEAAwEAAAAAAAAAAAAAAAAAESEiEv/aAAwDAQACEQMRAD8A7hLvcIGsLZRk+9wjN4WyjWjpdMXBNPVToOrgK+rbkZMhebhGeVsoV5uEDytlHO1ZVq4J+W3JWrgn47cjZy//2Q==);background-position:center}.lg-container{width:auto;border:1px solid #f4f4f4;background:rgba(255,255,255,.5);-webkit-border-radius:10px;-moz-border-radius:10px;border-radius:10px;-webkit-box-shadow:0 0 2px #aaa;-moz-box-shadow:0 0 2px #aaa;box-shadow:0 0 2px #aaa;margin:20px 250px;padding:25px 200px}@media screen and (max-width:1200px){.lg-container{margin:20px 20px;padding:25px 25px}}.lg-container h1{font-size:40px;text-align:center}#lg-form>div{margin:20px 8px;padding:5px 0}#lg-form label{display:none;font-size:20px;line-height:25px}#lg-form input[type=text],#lg-form textarea{border:1px solid rgba(51,51,51,.5);border-radius:10px;padding:10px;font-size:1pc;line-height:20px;width:100%;font-family:'serif',cursive;text-align:left;resize:none}#lg-form div:nth-child(3){text-align:center}#lg-form button{font-family:'serif',cursive;font-size:18px;border:1px solid #000;padding:5px 10px;border:1px solid rgba(51,51,51,.5);border-radius:10px;box-shadow:2px 1px 1px #aaa;cursor:pointer}#lg-form button:active{box-shadow:0 0 1px #aaa}#lg-form button:hover{background-color:#f4f4f4}#message{width:100%;text-align:center}.success{color:green}.error{color:red}
+</style>
+</head>
+<body  onselectstart="return false">
+<div class="lg-container">
+    <h1>~手机号码归属地查询~<br/><span class="STYLE3">fesugar.com</span></h1>
+	<div align="left">&nbsp;我把空白弄丢了(๑◕︵◕๑)<br /></div>
+<div align="right">&nbsp;(｡･ω･｡)ﾉ♡&nbsp;<br /></div>
+<div align="center">怎么办( ˉ ⌓ ˉ ๑)<br />﻿﻿</div>
+<div align="right">(＠￣ー￣＠)找不回来了&nbsp;<br /></div>
+<div align="center">&nbsp;。。发现小鹿了吗？<br /></div>
+<div align="left">&nbsp;难过😔<br /></div>
+    <form action="//www.fesugar.com/get_phonearea" id="lg-form" name="lg-form" method="get">
+        <div class="table-striped">
+            <label for="Search_box">text box:</label>
+            <input name="Search_box" type="text" id="Search_box" maxlength="20" placeholder="输入手机号码"/>
+        </div>
+        <div align="center">
+            <button type="submit" id="btn">进行查询</button>
+        </div>
+    </form>
+    <div id="message"></div>
+</div>
+<!-- v1.8.9 -->
+</body>
+</html>

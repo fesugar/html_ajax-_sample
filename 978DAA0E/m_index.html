@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<title>身份证号码解析</title>
+<script src="//apps.bdimg.com/libs/jquery/2.1.3/jquery.min.js"></script>
+<script type="text/javascript" src="../resource/main.js"></script>
+<!-- This is what you need -->
+<script src="../resource/dist/sweetalert-dev.js"></script>
+<link rel="stylesheet" href="../resource/dist/sweetalert.css">
+<!--.......................-->
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		$("#rjuq").click(function(){
+	
+     
+       var h_id = jQuery.trim($("#h_id").val());
+   
+			var action = $("#lg-form").attr('action');
+			var form_data = {
+				id: jQuery.trim($("#h_id").val()),
+				is_ajax: 1
+			};
+		
+       if ( h_id == "" || is_idcard_number(h_id) == false )
+	   	{
+			swal("提示","请检查输入的身份证号码！")
+			return false;
+		}
+     
+			// 传递参数
+			$.ajax({
+				type: "get",
+                url: action,
+                dataType: 'jsonp',//使用jsonp解决跨域访问问题
+                jsonp:"callback",
+                jsonpCallback:"ttttt",
+                data: form_data,
+				success: function(json)
+				{
+					if($.trim(json.code) == "0"){
+						var sex = json.data.sex;
+							switch(sex)
+							{
+							case "1":
+								  swal("查询成功", "||解析结果||\n" + "地址：" + json.data.address + "\n性别：男" + "\n生日：" + json.data.birth , "success")
+								  break;
+							case "0":
+								swal("查询成功", "||解析结果||\n" + "地址：" + json.data.address + "\n性别：女" + "\n生日：" + json.data.birth , "success")
+								break;
+							}
+						
+					}
+					else if($.trim(json.code) == "1"){
+						swal("提示", json.msg, "error")
+					}
+					else{
+						swal("错误", "数据提交过程中发生未知异常！", "error")
+					}
+				}	
+			});
+			return false;
+	});  
+});
+</script>
+<style>
+body, input, button {
+	font: normal 14px "Microsoft Yahei";
+	margin: 0;
+	padding: 0
+}
+.odform-tit {
+	font-weight: normal;
+	font-size: 25px;
+	color: #595757;
+	line-height: 40px;
+	text-align: center;
+	border-bottom: 1px solid #c9cacb;
+	margin: 0;
+	padding: 5% 0
+}
+.odform {
+	padding: 5%
+}
+.input-group {
+	margin-bottom: 7%;
+	position: relative
+}
+.input-group label {
+	padding: 3.5% 0;
+	position: absolute;
+	color: #595757;
+}
+.input-group input {
+	margin-left: 5em;
+	padding: 4% 5%;
+	box-sizing: border-box;
+	background: #efeff0;
+	border: 0;
+	border-radius: 5px;
+	color: #595757;
+	width: 75%
+}
+.odform button {
+	color: #fff;
+	text-align: center;
+	border: 0;
+	border-radius: 10px;
+	padding: 4%;
+	width: 100%;
+	font-size: 20px;
+	background-color: #66CCFF;
+}
+</style>
+</head>
+
+<body  onselectstart="return false">
+<h1 class="odform-tit">~18位身份证号码解析~</h1>
+<div align="left">&nbsp;我把空白弄丢了(๑◕︵◕๑)<br /></div>
+<div align="right">&nbsp;(｡･ω･｡)ﾉ♡&nbsp;<br /></div>
+<div align="center">怎么办( ˉ ⌓ ˉ ๑)<br />﻿﻿</div>
+<div align="right">(＠￣ー￣＠)找不回来了&nbsp;<br /></div>
+<div align="center">&nbsp;。。发现小鹿了吗？<br /></div>
+<div align="left">&nbsp;┐( ‾᷅㉨‾᷅ )┌ 怪我咯<br /></div>
+<div class="odform">
+    <form action="//www.fesugar.com/get_identitycards?" id="lg-form" name="lg-form" method="get">
+    <div class="input-group">
+      <label for="h_id">身份证号码</label>
+      <input type="text" id="h_id" placeholder="输入身份证号码">
+    </div>
+    <button type="submit" id="rjuq">点我查询</button>
+  </form>
+</div>
+<!-- v1.5.4 -->
+</body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta http-equiv="content-type" content="text/html;charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>登录SMS管理系统</title>
+<script src="//apps.bdimg.com/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="js/jquerysession.js"></script>
+<script src="//libs.baidu.com/bootstrap/3.0.3/js/bootstrap.min.js"></script> 
+<link href="//libs.baidu.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet" /> 
+
+<script type="text/javascript">
+
+	$(document).ready(function(){
+		$("#entry_btn").click(function(){
+	
+     
+       var h_username = jQuery.trim($("#h_username").val());
+	   var h_password = jQuery.trim($("#h_password").val());
+			var action = $("#lg-form").attr('action');
+			var form_data = {
+				username: jQuery.trim($("#h_username").val()),
+				password: jQuery.trim($("#h_password").val()),
+				action: 'login',
+				is_ajax: 1
+			};
+		
+       if ( h_username == "" || h_password == "" )
+	   	{
+			ShowMsg("请检查输入信息是否完整");
+			return false;
+		}
+     
+			// 传递参数
+			$.ajax({
+				type: "POST",
+                url: action,
+                data: form_data,
+				beforeSend: function() { $("#entry_btn").html("正在登录..."); },
+				success: function(json)
+				{
+					var obj1 = JSON.parse(json);
+					if($.trim(obj1.code) == "200"){
+						var message = obj1.message;
+							switch(message)
+							{
+							case "fail":
+								ShowWarn("用户名或密码不正确");
+								  break;
+							case "success":
+								ShowSuccess("登录成功");
+								 $.session.set('checkout', obj1.data.checkout)
+								 window.location.href='index.html';
+								break;
+							}
+						
+					}
+					else if($.trim(obj1.code) == "1"){
+						ShowFailure(obj1.msg);
+					}
+					else{
+						ShowFailure("数据提交过程中发生未知异常！");
+					}
+				},
+				complete: function() {  $("#entry_btn").html("登录");}	
+				
+			});
+			return false;
+	});  
+});
+
+
+
+
+//tip是提示信息，type:'success'是成功信息，'danger'是失败信息,'info'是普通信息
+function ShowTip(tip, type) {
+    var $tip = $('#tip');
+    if ($tip.length == 0) {
+        $tip = $('<span id="tip" style="font-weight:bold;position:absolute;top:20%;left: 50%;z-index:9999"></span>');
+        $('body').append($tip);
+    }
+    $tip.stop(true).attr('class', 'alert alert-' + type).text(tip).css('margin-left', -$tip.outerWidth() / 2).fadeIn(500).delay(2000).fadeOut(500);
+}
+//tip始终显示在屏幕上方top：50px
+function ShowTipAlwaysInTheMiddle(tip,type){
+	 /*var $left=document.body.clientWidth/2;
+	 var $top=document.body.clientHeight/2;
+	 alert($left+","+$top);*/
+	 var $tip = $('#tip');
+	    if ($tip.length == 0) {
+	        $tip = $('<span id="tip" style="font-weight:bold;position:fixed;top:20%;left:50%;z-index:9999"></span>');
+	        $('body').append($tip);
+	    }
+	    $tip.stop(true).attr('class', 'alert alert-' + type).text(tip).css('margin-left', -$tip.outerWidth() / 2).fadeIn(500).delay(2000).fadeOut(500);
+}
+function ShowMsg(msg) {
+    ShowTip(msg, 'info');
+}
+function ShowMiddle(msg){
+	ShowTipAlwaysInTheMiddle(msg,'info');
+}
+function ShowSuccess(msg) {
+    ShowTip(msg, 'success');
+}
+ 
+function ShowFailure(msg) {
+    ShowTip(msg, 'danger');
+}
+ 
+function ShowWarn(msg, $focus, clear) {
+    ShowTip(msg, 'warning');
+    if ($focus) $focus.focus();
+    if (clear) $focus.val('');
+    return false;
+}
+
+</script>
+<link rel="stylesheet" type="text/css" href="css/loginstyle.css">
+
+<script type="text/javascript" src="js/loginvector.js"></script>
+
+</head>
+<body>
+
+<div id="container">
+	<div id="output">
+		<div class="containerT">
+			<h1>SMS管理系统</h1>
+			<form action="//www.fesugar.com/servers/sms/index.php?" id="lg-form" name="lg-form" method="post">
+				<input type="text" placeholder="用户名" id="h_username">
+				<input type="password" placeholder="密码" id="h_password">
+				<button type="button" id="entry_btn">登录</button>
+				<div id="prompt" class="prompt"></div>
+			</form>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+    $(function(){
+        Victor("container", "output");   //登陆背景函数
+        $("#h_username").focus();
+        $(document).keydown(function(event){
+            if(event.keyCode==13){
+                $("#entry_btn").click();
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

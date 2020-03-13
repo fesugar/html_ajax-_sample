@@ -1,0 +1,43 @@
+
+
+/*弹窗*/
+.tan{position: fixed;top: 0;left: 0;width: 100%;height: 100%;background: rgba(0,0,0,.6);display: none;}
+.tan .box{width: auto;height: auto;overflow: hidden;border-radius: 3px;position: absolute;top: 50%;left: 50%;transform: translate(-50%,-50%);}
+
+  .form-horizontal .control-label {
+    text-align: right;
+    margin-bottom: 0;
+    padding-top: 7px;
+  }
+
+
+.form-horizontal.templatemo-payment-form .radio.templatemo-no-padding-top {	padding-top: 0; }
+
+.form-group:last-child { margin-bottom: 0; }
+
+.form-horizontal .control-label { margin-bottom: 10px; }
+
+.templatemo-container {
+	background-color: rgba(255,255,255,0.8);
+	border: 1px solid #dedede;
+	border-radius: 8px;
+	margin: 0 auto;
+	padding: 30px;
+}
+
+/*-------------------------------------
+5. create-account
+---------------------------------------*/
+.templatemo-create-account {
+	background-color: #fff;
+	border: none;
+	max-width: 700px;	
+}
+.templatemo-create-account label { font-weight: 400; }
+.templatemo-create-account input[type='checkbox'] {
+	margin-right: 10px;
+	position: relative;
+	top: -1.5px;
+}
+.templatemo-radio-group { margin-top: 30px; }
+
